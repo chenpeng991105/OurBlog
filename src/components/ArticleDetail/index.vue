@@ -1,0 +1,350 @@
+<template>
+  <div class="article-wrap">
+    <div class="article-author">
+      <a href="" class="avatar">
+        <img src="@/assets/img/user.jpg" alt="">
+      </a>
+      <div class="author-info">
+        <a href="" class="username">chenyuyu</a>
+        <div class="article-data">
+          <p class="time">
+            <span>{{articleDetail.articleData.time}}</span>
+          </p>
+          <p class="watch">
+            阅读
+            <span>{{articleDetail.articleData.watch}}</span>
+          </p>
+        </div>
+      </div>
+        <button class="follow">关注</button>
+    </div>
+    <div class="article-banner">
+      <img alt="" :src="articleDetail.articleImg">
+    </div>
+    <div class="article-title">
+      <h1>{{articleDetail.articleTitle}}</h1>
+    </div>
+    <div class="article-detail" v-html="articleDetail.htmlArticle" v-highlight></div>
+  </div>
+</template>
+
+<script>
+import Vue from 'vue'
+import highlight from 'highlight.js'
+
+Vue.directive('highlight', function (el){
+  const code = el.querySelectorAll('pre code');
+  code.forEach(item => {
+    highlight.highlightBlock(item);
+  })
+})
+
+export default {
+  props: {
+    articleDetail: {
+      type: Object
+    }
+  },
+  data(){
+    return{
+
+    }
+  }
+}
+</script>
+
+<style lang="less" rel="stylesheet/less" scoped>
+@import "src/assets/css/common";
+
+.article-wrap{
+  background-color: #fff;
+  padding: 20px 25px 10px;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+.article-author{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .avatar img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  .author-info{
+    width: 100%;
+    margin-left: 10px;
+    flex: 1;
+    .username{
+      display: inline-block;
+      width: 100%;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .article-data{
+      display: flex;
+      color: #909090;
+      font-size: 16px;
+      .time{
+        margin-right: 10px;
+      }
+    }
+  }
+  .follow{
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    border: 1px solid #1e90ff;
+    color: #1e90ff;
+    background-color: #fff;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .follow:hover {
+    background-color: #fafafa;
+  }
+}
+.article-title{
+  font-size: 22px;
+  margin: 20px 0;
+}
+.article-banner {
+  width: 100%;
+  height: 350px;
+  margin: 20px 0;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.article-detail{
+  width: 100%;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  /deep/ pre {
+    display: block;
+    margin: 10px 0;
+    line-height: 1.5;
+  }
+  /deep/ code{
+    font-family: Consolas, "Microsoft YaHei", serif !important;
+    border-radius: 4px;
+  }
+  /deep/ p{
+    margin: 5px 0;
+    line-height: 1.5;
+    img{
+      width: 100%;
+    }
+  }
+  /deep/ span{
+    line-height: 1.5;
+  }
+}
+
+/deep/ .hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 15px;
+  background: #111;
+  color: #d6deeb;
+}
+
+/* General Purpose */
+/deep/ .hljs-keyword {
+  color: #c792ea;
+  font-style: italic;
+}
+
+/deep/ .hljs-built_in {
+  color: #1dd1a1;
+  font-style: italic;
+}
+
+/deep/ .hljs-type {
+  color: #82aaff;
+}
+
+/deep/ .hljs-literal {
+  color: #ff5874;
+}
+
+/deep/ .hljs-number {
+  color: #F78C6C;
+}
+
+/deep/ .hljs-regexp {
+  color: #5ca7e4;
+}
+
+/deep/ .hljs-string {
+  color: #ecc48d;
+}
+
+/deep/ .hljs-subst {
+  color: #d3423e;
+}
+
+/deep/ .hljs-symbol {
+  color: #82aaff;
+}
+
+/deep/ .hljs-class {
+  color: #ffcb8b;
+}
+
+/deep/ .hljs-function {
+  color: #82AAFF;
+}
+
+/deep/ .hljs-title {
+  color: #DCDCAA;
+  font-style: italic;
+}
+
+/deep/ .hljs-params {
+  color: #7fdbca;
+}
+
+/* Meta */
+/deep/ .hljs-comment {
+  color: #637777;
+  font-style: italic;
+}
+
+/deep/ .hljs-doctag {
+  color: #7fdbca;
+}
+
+/deep/ .hljs-meta {
+  color: #82aaff;
+}
+
+/deep/ .hljs-meta-keyword {
+  color: #82aaff;
+}
+
+/deep/ .hljs-meta-string {
+  color: #ecc48d;
+}
+
+/* Tags, attributes, config */
+/deep/ .hljs-section {
+  color: #82b1ff;
+}
+
+/deep/ .hljs-tag,
+/deep/ .hljs-name,
+/deep/ .hljs-builtin-name {
+  color: #7fdbca;
+}
+
+/deep/ .hljs-attr {
+  color: #7fdbca;
+}
+
+/deep/ .hljs-attribute {
+  color: #80cbc4;
+}
+
+/deep/ .hljs-variable {
+  color: #55efc4;
+}
+
+/* Markup */
+/deep/ .hljs-bullet {
+  color: #d9f5dd;
+}
+
+/deep/ .hljs-code {
+  color: #80CBC4;
+}
+
+/deep/ .hljs-emphasis {
+  color: #c792ea;
+  font-style: italic;
+}
+
+/deep/ .hljs-strong {
+  color: #55efc4;
+  font-weight: bold;
+}
+
+/deep/ .hljs-formula {
+  color: #c792ea;
+}
+
+/deep/ .hljs-link {
+  color: #ff869a;
+}
+
+/deep/ .hljs-quote {
+  color: #697098;
+  font-style: italic;
+}
+
+/* CSS */
+/deep/ .hljs-selector-tag {
+  color: #ff6363;
+}
+
+/deep/ .hljs-selector-id {
+  color: #fad430;
+}
+
+/deep/ .hljs-selector-class {
+  color: #1dd1a1;
+  font-style: italic;
+}
+
+/deep/ .hljs-selector-attr,
+/deep/ .hljs-selector-pseudo {
+  color: #c792ea;
+  font-style: italic;
+}
+
+/* Templates */
+/deep/ .hljs-template-tag {
+  color: #c792ea;
+}
+
+/deep/ .hljs-template-variable {
+  color: #addb67;
+}
+
+/* diff */
+/deep/ .hljs-addition {
+  color: #addb67ff;
+  font-style: italic;
+}
+
+/deep/ .hljs-deletion {
+  color: #EF535090;
+  font-style: italic;
+}
+@media screen and (max-width: 1024px){
+  .article-title{
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 900px){
+  .article-wrap{
+    padding: 15px 20px;
+  }
+  .article-banner{
+    height: 200px;
+  }
+  .article-title{
+    font-size: 16px;
+  }
+}
+
+</style>
