@@ -50,9 +50,7 @@ export default {
     cursor: pointer;
     transition: box-shadow .2s;
     .icon-top{
-      font-size: 1px;
-      font-weight: bold;
-      transform: scale(0.8);
+      font-size: 10px;
     }
   }
   .inner:hover{

@@ -12,6 +12,9 @@
           <li>
             <a href="">前端</a>
           </li>
+          <li>
+            <a href="">实用工具</a>
+          </li>
         </ul>
         <div class="nav-cursor" style="width: 68px;left: 0" ref="navCursor"></div>
       </div>
@@ -27,7 +30,25 @@
           <a href="/login" class="login-link">登录</a>
         </div>
         <div class="user-info">
-          <img src="@/assets/img/user.jpg" alt="">
+          <img src="@/assets/img/user.jpg" alt="头像" @click="showUserBox">
+          <ul class="user-box" v-show="userBoxVisible">
+            <li @click="$router.push('/new')">
+              <i class="iconfont icon-write"></i>
+              写文章
+            </li>
+            <li @click="$router.push('/user')">
+              <i class="iconfont icon-user"></i>
+              我的主页
+            </li>
+            <li @click="$router.push('/profile')">
+              <i class="iconfont icon-profile"></i>
+              个人资料
+            </li>
+            <li>
+              <i class="iconfont icon-logout"></i>
+              登出
+            </li>
+          </ul>
         </div>
         <p class="menu">
           <i class="iconfont icon-menu"></i>
@@ -59,9 +80,15 @@ export default {
 
   },
   data() {
-    return {}
+    return {
+      userBoxVisible: false
+    }
   },
-  methods: {}
+  methods: {
+    showUserBox() {
+      this.userBoxVisible = !this.userBoxVisible
+    },
+  }
 }
 </script>
 
@@ -221,10 +248,36 @@ export default {
   .user-info{
     margin-left: 30px;
     cursor: pointer;
+    position: relative;
     img{
       display: inline-block;
       vertical-align: middle;
       width: 35px;
+    }
+    .user-box{
+      position: absolute;
+      top: 47px;
+      right: 0;
+      width: 150px;
+      padding: 10px 0;
+      color: #909090;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      box-shadow: 0 1px 2px #f1f1f1;
+      z-index: 10;
+      li{
+        height: 35px;
+        line-height: 35px;
+        padding-left: 15px;
+        background-color: #fff;
+        &:hover{
+          background-color: #f8f8f8;
+        }
+        .iconfont{
+          margin-right: 3px;
+        }
+      }
     }
   }
 }

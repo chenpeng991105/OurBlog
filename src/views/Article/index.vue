@@ -5,7 +5,6 @@
       <div class="content">
         <div class="content-left">
           <article-detail :articleDetail="articleDetail"/>
-          <comment/>
         </div>
         <div class="content-right">
           <about-author/>
@@ -40,7 +39,7 @@ export default {
   data(){
     return{
       articleDetail: {
-        articleImg: require('@/assets/img/2.jpg'),
+        articleImg: require('@/assets/img/bingbing.png'),
         articleTitle: 'JavaScript实现函数防抖和函数节流',
         articleTags: ['JavaScript', 'code'],
         articleData: {

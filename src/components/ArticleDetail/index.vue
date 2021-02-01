@@ -126,9 +126,7 @@ export default {
 .article-detail{
   width: 100%;
   padding-bottom: 10px;
-  margin-bottom: 10px;
   background-color: #fff;
-  border-bottom: 1px solid #e0e0e0;
   /deep/ pre {
     display: block;
     margin: 10px 0;

@@ -1,15 +1,12 @@
 <template>
-  <div class="hot-new">
+  <div class="search-article">
     <ul class="top-line">
-      <li :class="{active : hotOrNew}" @click="hotOrNew = true">热门</li>
-      <li :class="{active : !hotOrNew}" @click="hotOrNew = false">最新</li>
+      <li :class="{active: activeKey === 1}" @click="activeKey = 1">综合</li>
+      <li :class="{active: activeKey === 2}" @click="activeKey = 2">文章</li>
+      <li :class="{active: activeKey === 3}" @click="activeKey = 3">标签</li>
+      <li :class="{active: activeKey === 4}" @click="activeKey = 4">作者</li>
     </ul>
-    <div class="hot" :style="{display : hotOrNew ? 'block' : 'none'}">
-      <article-wrap :articles="articles"/>
-    </div>
-    <div class="new" :style="{display : hotOrNew ? 'none' : 'block'}">
-      <article-wrap :articles="articles"/>
-    </div>
+    <article-wrap :articles="articles"/>
   </div>
 </template>
 
@@ -19,8 +16,9 @@ export default {
   components: {
     ArticleWrap
   },
-  data(){
-    return{
+  data() {
+    return {
+      activeKey: 1,
       articles: [
         {
           articleImg: require('@/assets/img/bingbing.png'),
@@ -93,14 +91,13 @@ export default {
           }
         },
       ],
-      hotOrNew: true
     }
-  },
+  }
 }
 </script>
 
-<style lang="less" rel="stylesheet/less" scoped>
-.hot-new{
+<style lang="less" scoped>
+.search-article{
   background-color: #fff;
   .top-line{
     width: 100%;

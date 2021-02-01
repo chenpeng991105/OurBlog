@@ -41,30 +41,6 @@ export default {
     }
   },
   methods: {
-    sendCode(){
-      let data = {
-        email: this.email
-      }
-      axios.post('http://192.168.31.36:9000/user/sendCode', data).then(res => {
-        console.log(res.data)
-      })
-      const sendCode = this.$refs.sendCode
-      sendCode.style.cursor = 'default'
-      sendCode.style.color = '#666'
-      sendCode.setAttribute('disabled', 'disabled')
-      let time = 60
-      let timer = setInterval(() => {
-        time--
-        sendCode.innerHTML = `${time} 秒后重新发送`
-        if(time === 0){
-          clearInterval(timer)
-          sendCode.innerHTML = '发送验证码'
-          sendCode.style.cursor = 'pointer'
-          sendCode.style.color = '#2d8cf0'
-          sendCode.removeAttribute('disabled')
-        }
-      }, 1000)
-    },
     login(){
       let data = {
         username: this.username,
@@ -79,16 +55,6 @@ export default {
         console.log('请输入邮箱或用户名')
       }
     },
-    register(){
-      let data = {
-        email: this.email,
-        code: this.code,
-        password: this.password
-      }
-      axios.post('http://192.168.31.36:9000/user/register', data).then(res => {
-        console.log(res.data)
-      })
-    }
   },
   computed: {
     emailTip(){
@@ -177,6 +143,15 @@ export default {
       font-size: 14px;
       color: #666;
     }
+  }
+}
+@media screen and (max-width: 900px){
+  .login-container{
+    background: url("../../assets/img/loginBg2.jpg") no-repeat;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 }
 </style>

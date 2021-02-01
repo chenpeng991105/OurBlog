@@ -5,12 +5,63 @@
         <input type="text" placeholder="请输入文章标题..." class="title">
       </div>
       <div class="right">
-        <button>发布</button>
+        <p class="publish" @click="showPublishBox">发布</p>
+        <div class="publish-box" v-show="visible">
+          <div class="title">发布文章</div>
+          <div class="category-box">
+            <div class="sub-title">选择分类</div>
+            <div class="category-list">
+              <el-tag
+                  v-for="(item, index) in cates"
+                  :key="index"
+                  class="mr10 mt10"
+                  type="info"
+                  size="medium"
+                  style="cursor: pointer"
+                  @click="selectTag($event, item)">
+                {{item}}
+              </el-tag>
+            </div>
+          </div>
+          <div class="tag-box">
+            <div class="sub-title">添加标签</div>
+            <div class="tag-list">
+              <el-tag
+                  v-for="(item, index) in tags"
+                  :key="index"
+                  class="mr10 mt10"
+                  closable
+                  size="medium"
+                  @close="deleteTag(index)">
+                {{item}}
+              </el-tag>
+              <el-input
+                  v-if="tagInputVisible"
+                  v-model="tagInputValue"
+                  ref="tagInput"
+                  style="max-width: 100px"
+                  class="mr10 mt10"
+                  @keyup.enter.native="handleTagInputConfirm"
+                  @blur="handleTagInputConfirm"
+                  size="small"/>
+              <el-button
+                  v-else
+                  size="small"
+                  class="mr10 mt10"
+                  @click="showTagInput">
+                New Tag
+              </el-button>
+            </div>
+          </div>
+          <div class="publish-btn">
+            <el-button type="primary" size="medium" @click="publish">确认并发布</el-button>
+          </div>
+        </div>
       </div>
     </div>
     <mavon-editor
         ref="md"
-        placeholder="请输入文档内容..."
+        placeholder="Write something here..."
         :boxShadow="false"
         class="mavon-editor"
         v-model="content"
@@ -60,14 +111,53 @@ export default {
         /* 2.2.1 */
         subfield: true, // 单双栏模式
         preview: true // 预览
-      }
+      },
+      visible: false,
+      tagInputVisible: false,
+      tagInputValue: '',
+      tags: [],
+      cateInputVisible: false,
+      cateInputValue: '',
+      cates: ['前端', '后端', '大数据', '人工智能'],
+      selectCate: '',
     };
   },
   methods: {
     // 上传图片方法
     $imgAdd(pos, $file) {
       console.log(pos, $file);
-    }
+    },
+    showTagInput() {
+      this.tagInputVisible = true
+      this.$nextTick(() => {
+        this.$refs.tagInput.$refs.input.focus();
+      })
+    },
+    handleTagInputConfirm() {
+      if (this.tagInputValue.trim()) {
+        this.tags.push(this.tagInputValue.trim())
+      }
+      this.tagInputVisible = false
+      this.tagInputValue = ''
+    },
+    deleteTag(index) {
+      this.tags.splice(index, 1)
+    },
+    showPublishBox() {
+      this.visible = !this.visible
+    },
+    selectTag(event, cate) {
+      const self = event.target
+      const children = self.parentNode.children
+      children.forEach(c => {
+        c.classList.add('el-tag--info')
+      })
+      self.classList.remove('el-tag--info')
+      this.selectCate = cate
+    },
+    publish() {
+      console.log(this.selectCate)
+    },
   }
 };
 </script>
@@ -88,58 +178,103 @@ export default {
 .left{
   flex: 1;
   margin-right: 20px;
-}
-.title{
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 22px;
-  letter-spacing: 1px;
-  font-weight: 700;
-  vertical-align: middle;
-  &:focus{
-    border-color: transparent;
-    box-shadow: none;
+  .title{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 22px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    vertical-align: middle;
+    &:focus{
+      border-color: transparent;
+      box-shadow: none;
+    }
   }
 }
 .right{
-  button{
-    width: 80px;
-    height: 33px;
-    line-height: 33px;
-    text-align: center;
-    font-size: 16px;
-    color: #fff;
-    border-radius: 3px;
-    border: none;
-    outline: none;
-    background-color: #007fff;
+  position: relative;
+  .publish{
+    color: #007fff;
     cursor: pointer;
+    user-select: none;
   }
-}
-.mavon-editor{
-  z-index: 1;
-  border: 1px solid #d9d9d9;
-  height: calc(100vh - 62px);
-  font-size: 16px;
-}
-/deep/ .markdown-body code{
-  font-family: Consolas, "Microsoft YaHei", serif !important;
-  font-size: 16px;
-}
-/deep/ .markdown-body pre{
-  padding: 15px;
-  background-color: #111;
-  color: #d6deeb;
-}
-/deep/ .hljs {
-  display: block;
-  overflow-x: auto;
-  background: #111;
-  color: #d6deeb;
-  border-radius: 4px;
-}
-/* General Purpose */
+  .publish-box{
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 280px;
+    line-height: 1;
+    padding: 20px;
+    color: #909090;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px #f1f1f1;
+    cursor: default;
+    z-index: 2;
+    &::before{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      top: -7px;
+      right: 12px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-right: none;
+      border-bottom: none;
+      transform: rotate(45deg);
+      }
+      .title{
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: rgba(119,127,141,.8);
+      }
+      .category-box, .tag-box{
+        margin-bottom: 15px;
+      }
+      .sub-title{
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+      .publish-btn{
+        width: 120px;
+        margin: 0 auto;
+      }
+    }
+  }
+  .mr10{
+    margin-right: 10px;
+  }
+  .mt10{
+    margin-bottom: 10px;
+  }
+  .mavon-editor{
+    z-index: 1;
+    border: 1px solid #d9d9d9;
+    height: calc(100vh - 62px);
+    font-size: 16px;
+  }
+  /deep/ .markdown-body code{
+    font-family: Consolas, "Microsoft YaHei", serif !important;
+    font-size: 16px;
+  }
+  /deep/ .markdown-body pre{
+    padding: 15px;
+    background-color: #111;
+    color: #d6deeb;
+  }
+  /deep/ .hljs {
+    display: block;
+    overflow-x: auto;
+    background: #111;
+    color: #d6deeb;
+    border-radius: 4px;
+  }
+  /* General Purpose */
 /deep/ .hljs-keyword {
   color: #c792ea;
   font-style: italic;

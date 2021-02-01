@@ -12,7 +12,7 @@ const routes = [
         path: '/index',
         component: () => import(/* webpackChunkName: "index" */ '@/views/Index/index'),
         meta: {
-            title: '首页'
+            title: 'OurBlog'
         }
     },
     {
@@ -33,7 +33,7 @@ const routes = [
         path: '/user',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/index'),
         meta: {
-            title: '个人页'
+            title: '个人主页'
         }
     },
     {
@@ -41,6 +41,20 @@ const routes = [
         component: () => import(/* webpackChunkName: "user" */ '@/views/New/index'),
         meta: {
             title: '新建文章'
+        }
+    },
+    {
+        path: '/search',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Search/index'),
+        meta: {
+            title: '搜索'
+        }
+    },
+    {
+        path: '/profile',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Profile/index'),
+        meta: {
+            title: '个人资料'
         }
     },
 ]

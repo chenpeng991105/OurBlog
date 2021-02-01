@@ -16,7 +16,7 @@
           <i class="iconfont icon-gitee"></i>
         </a>
       </div>
-      <button class="follow">关注</button>
+      <button class="follow" @click="$router.push('/profile')">编辑个人资料</button>
     </div>
   </div>
 </template>
