@@ -1,7 +1,7 @@
 <template>
   <div class="article-wrap">
     <template v-for="(item, index) in articles">
-      <a href="/article" :key="index" class="article-link">
+      <div @click="$router.push('/article')" :key="index" class="article-link">
         <div class="article">
           <div class="article-content">
             <h1 class="article-title">
@@ -20,14 +20,21 @@
               </p>
             </div>
             <div class="article-data">
-              <p class="zan">
+              <div class="item zan">
                 <i class="iconfont icon-zan"></i>
                 {{ item.articleInfo.zan }}
-              </p>
-              <p class="watch">
+              </div>
+              <div class="item watch">
                 <i class="iconfont icon-watch"></i>
                 {{ item.articleInfo.watch }}
-              </p>
+              </div>
+              <div class="item more" v-if="isUser" @click.stop="showMoreBox">
+                <i class="iconfont icon-more"></i>
+                <ul class="more-box" v-show="moreBoxVisible">
+                  <li @click="editArticle">编辑</li>
+                  <li @click="deleteArticle">删除</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="article-image">
@@ -35,7 +42,7 @@
           </div>
           <div class="image-mask"></div>
         </div>
-      </a>
+      </div>
     </template>
   </div>
 </template>
@@ -43,12 +50,24 @@
 <script>
 export default {
   props: {
-    articles: {
-      type: Array
-    }
+    articles: Array,
+    isUser: Boolean
   },
   data() {
-    return {}
+    return {
+      moreBoxVisible: false
+    }
+  },
+  methods: {
+    showMoreBox() {
+      this.moreBoxVisible = !this.moreBoxVisible
+    },
+    editArticle() {
+
+    },
+    deleteArticle() {
+
+    },
   }
 }
 </script>
@@ -67,8 +86,12 @@ export default {
 .article-link{
   display: block;
   background-color: #fff;
+  cursor: pointer;
   &:hover{
     background-color: #fcfcfc;
+  }
+  &:hover .article-content .article-data .item.more{
+    display: flex;
   }
 }
 .article-image {
@@ -94,7 +117,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 22px;
+    font-size: 20px;
     color: #213135;
     transition: color .2s;
   }
@@ -111,16 +134,17 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    margin-top: 3px;
+    margin-top: 5px;
     font-size: 16px;
     color: #213135;
     .author{
       display: flex;
       align-items: center;
       img{
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
+        margin-right: 5px;
       }
     }
     .author:hover{
@@ -138,21 +162,52 @@ export default {
 
   .article-data {
     width: 100%;
-    margin-top: 8px;
-    margin-left: 5px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
 
-    p {
-      color: #666;
-      font-size: 14px;
-      margin-right: 20px;
+    .item {
       display: flex;
       align-items: center;
-
+      color: #666;
+      font-size: 13px;
+      height: 26px;
+      padding: 0 8px;
+      border: 1px solid #e0e0e0;
+      &.watch{
+        border-left: none;
+      }
+      &.more{
+        position: relative;
+        display: none;
+        border-left: none;
+      }
       i {
-        margin-right: 3px;
+        margin-right: 4px;
+        font-size: 14px;
         vertical-align: middle;
+      }
+      .more-box{
+        position: absolute;
+        top: 30px;
+        left: -10px;
+        width: 100px;
+        color: #909090;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        box-shadow: 0 1px 2px #f1f1f1;
+        z-index: 10;
+        li{
+          height: 30px;
+          line-height: 30px;
+          padding-left: 15px;
+          background-color: #fff;
+          user-select: none;
+          &:hover{
+            background-color: #f8f8f8;
+          }
+        }
       }
     }
   }

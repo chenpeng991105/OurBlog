@@ -57,4 +57,11 @@ export default {
     box-shadow: 0 0 10px 5px rgba(30,144,255, .1);
   }
 }
+@media screen and (max-width: 1024px) {
+  #back-to-top{
+    .inner{
+      display: none;
+    }
+  }
+}
 </style>

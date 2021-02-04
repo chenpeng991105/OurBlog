@@ -1,8 +1,8 @@
 <template>
   <div class="article-wrap">
     <div class="article-author">
-      <a href="" class="avatar">
-        <img src="@/assets/img/user.jpg" alt="">
+      <a href="/user">
+        <img src="@/assets/img/user.jpg" alt="" class="avatar">
       </a>
       <div class="author-info">
         <a href="" class="username">chenyuyu</a>
@@ -16,21 +16,24 @@
           </p>
         </div>
       </div>
-        <button class="follow">关注</button>
     </div>
     <div class="article-banner">
-      <img alt="" :src="articleDetail.articleImg">
+      <img alt="" class="banner" :src="articleDetail.articleImg">
     </div>
     <div class="article-title">
       <h1>{{articleDetail.articleTitle}}</h1>
     </div>
     <div class="article-detail" v-html="articleDetail.htmlArticle" v-highlight></div>
+    <div class="img-preview" v-show="imgPreviewVisible">
+      <img src="" alt="" @click="closeImgPreview">
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import highlight from 'highlight.js'
+import throttle from "@/utils/throttle";
 
 Vue.directive('highlight', function (el){
   const code = el.querySelectorAll('pre code');
@@ -38,7 +41,6 @@ Vue.directive('highlight', function (el){
     highlight.highlightBlock(item);
   })
 })
-
 export default {
   props: {
     articleDetail: {
@@ -47,7 +49,32 @@ export default {
   },
   data(){
     return{
-
+      imgPreviewVisible: false,
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const imgs = document.querySelector('.article-detail').querySelectorAll('p img')
+      const previewImg = document.querySelector('.img-preview img')
+      imgs.forEach(img => {
+        img.addEventListener('click', () => {
+          this.imgPreviewVisible = true
+          previewImg.src = img.src
+        })
+      })
+    })
+    let checkIsDownThrottle = throttle(this.checkIsDown, 2000)
+    document.addEventListener('scroll', checkIsDownThrottle)
+  },
+  methods: {
+    closeImgPreview() {
+      this.imgPreviewVisible = false
+    },
+    checkIsDown() {
+      let { scrollTop, scrollHeight, clientHeight } = document.documentElement
+      if (scrollHeight - (scrollTop + clientHeight) < 1) {
+        this.articleDetail.articleData.watch++
+      }
     }
   }
 }
@@ -61,13 +88,31 @@ export default {
   padding: 20px 25px 10px;
   box-sizing: border-box;
   border-radius: 2px;
+  .img-preview{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1000;
+    img{
+      width: auto;
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: zoom-out;
+    }
+  }
 }
 .article-author{
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .avatar img{
+  .avatar{
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -82,6 +127,7 @@ export default {
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 5px;
+      color: #213135;
     }
     .article-data{
       display: flex;
@@ -110,8 +156,12 @@ export default {
   }
 }
 .article-title{
-  font-size: 22px;
+  font-size: 20px;
   margin: 20px 0;
+  color: #213135;
+  h1{
+    font-weight: normal;
+  }
 }
 .article-banner {
   width: 100%;
@@ -127,10 +177,29 @@ export default {
   width: 100%;
   padding-bottom: 10px;
   background-color: #fff;
+  /deep/ h1, /deep/ h2{
+    margin: 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eaecef;
+    color: #213135;
+  }
+  /deep/ h3, /deep/ h4, /deep/ h5, /deep/ h6{
+    margin: 15px 0;
+    color: #213135;
+  }
+  /deep/ ul{
+    padding-left: 25px;
+    margin-bottom: 15px;
+    color: #213135;
+    li{
+      line-height: 30px;
+    }
+  }
   /deep/ pre {
     display: block;
     margin: 10px 0;
     line-height: 1.5;
+    color: #213135;
   }
   /deep/ code{
     font-family: Consolas, "Microsoft YaHei", serif !important;
@@ -139,8 +208,10 @@ export default {
   /deep/ p{
     margin: 5px 0;
     line-height: 1.5;
+    color: #213135;
     img{
       width: 100%;
+      cursor: zoom-in;
     }
   }
   /deep/ span{
@@ -336,12 +407,23 @@ export default {
 @media screen and (max-width: 900px){
   .article-wrap{
     padding: 15px 20px;
+    .img-preview{
+      img{
+        width: 100%;
+        height: auto;
+      }
+    }
   }
   .article-banner{
     height: 200px;
   }
   .article-title{
     font-size: 16px;
+  }
+  .article-detail {
+    /deep/ h1, /deep/ h2, /deep/ h3, /deep/ h4, /deep/ h5, /deep/ h6 {
+      font-weight: normal;
+    }
   }
 }
 

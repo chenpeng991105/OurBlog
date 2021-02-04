@@ -29,7 +29,7 @@
         <li class="item">
           <span>密码</span>
           <div class="input-box">
-            <input type="text" class="input" placeholder="填写你的密码" ref="password" v-model="password">
+            <input type="password" class="input" placeholder="填写你的密码" ref="password" v-model="password">
             <div class="action">
               <el-button type="text" v-if="!isEditPassword" @click="editPassword">修改</el-button>
               <el-button type="text" v-if="isEditPassword" @click="savePassword">保存</el-button>
@@ -96,16 +96,16 @@ export default {
 
     },
     cancel(type) {
-      switch (type){
+      switch (type) {
         case 'username':
           this.isEditUsername = false
-              break
+          break
         case 'password':
           this.isEditPassword = false
-              break
+          break
         case 'githubUrl':
           this.isEditGithubUrl = false
-              break
+          break
       }
     },
   }
@@ -113,35 +113,41 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-profile{
+.edit-profile {
   padding: 27px 40px 60px;
   background-color: #fff;
 }
-.profile-box{
-  h1{
+
+.profile-box {
+  h1 {
     margin: 15px 0;
     font-size: 25px;
     color: #333;
   }
 }
-.edit-list{
-  .item{
+
+.edit-list {
+  .item {
     display: flex;
     align-items: center;
     padding: 20px 0;
     border-top: 1px solid #f1f1f1;
-    &:last-of-type{
+
+    &:last-of-type {
       border-bottom: 1px solid #f1f1f1;
     }
-    span{
+
+    span {
       width: 150px;
       font-size: 14px;
       color: #333;
     }
-    .avatar-upload{
+
+    .avatar-upload {
       display: flex;
       align-items: center;
-      .avatar-preview{
+
+      .avatar-preview {
         flex: 0 0 auto;
         width: 80px;
         height: 80px;
@@ -149,15 +155,43 @@ export default {
         object-fit: cover;
       }
     }
-    .input-box{
+
+    .input-box {
       display: flex;
       flex: 1;
-      .input{
+      .input {
         flex: 1;
         color: #909090;
         border: none;
         outline: none;
         font-size: 16px;
+      }
+      .action{
+        display: flex;
+        width: 70px;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .edit-list {
+    .item {
+      display: block;
+      span{
+        display: block;
+        margin-bottom: 10px;
+      }
+      .avatar-upload{
+        justify-content: space-between;
+      }
+      .input-box{
+        justify-content: space-between;
+        flex: none;
+        .input{
+          flex: none;
+        }
       }
     }
   }

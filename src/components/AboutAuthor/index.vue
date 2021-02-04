@@ -6,7 +6,7 @@
         <img alt="" src="@/assets/img/user.jpg">
       </div>
       <div class="user-info">
-        <p class="username">CHEN</p>
+        <p class="username">陈鹏</p>
         <p class="desc" title="前端搬砖攻城狮">前端搬砖攻城狮</p>
       </div>
     </a>
@@ -65,6 +65,7 @@ export default {}
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
+      color: #213135;
     }
 
     .desc {

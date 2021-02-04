@@ -5,7 +5,7 @@
       <div class="content">
         <div class="content-left">
           <user-info/>
-          <article-wrap :articles="articles"/>
+          <article-wrap :articles="articles" :isUser="true"/>
         </div>
         <div class="content-right">
           <user-achievement/>

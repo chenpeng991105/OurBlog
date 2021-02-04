@@ -52,7 +52,7 @@ export default {
           p.style.fontWeight = 'bold'
         }
         li.addEventListener('click', function (){
-          scroll(document.querySelector('#'+item.id).offsetTop+60);
+          scroll(document.querySelector('#'+item.id).offsetTop);
         })
         li.appendChild(p)
         articleTocUl.appendChild(li)
@@ -83,6 +83,7 @@ export default {
   margin: 15px auto 0;
   padding: 0 20px 15px;
   box-sizing: border-box;
+  color: #213135;
   /deep/ li{
     margin: 6px 0;
     cursor: pointer;

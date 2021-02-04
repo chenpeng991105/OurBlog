@@ -12,11 +12,8 @@
         <a href="" class="link">
           <i class="iconfont icon-github"></i>
         </a>
-        <a href="" class="link">
-          <i class="iconfont icon-gitee"></i>
-        </a>
       </div>
-      <button class="follow" @click="$router.push('/profile')">编辑个人资料</button>
+      <el-button plain @click="$router.push('/profile')">编辑个人资料</el-button>
     </div>
   </div>
 </template>
@@ -69,28 +66,31 @@ export default {}
       display: flex;
       justify-content: flex-end;
       .link{
-        margin-left: 20px;
-        font-size: 20px;
-        .icon-gitee{
-          color: #c71d24;
+        .icon-github{
+          font-size: 25px;
+          color: #000;
         }
       }
     }
-    .follow{
-      width: 120px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 16px;
-      border: 1px solid #1e90ff;
-      color: #1e90ff;
-      background-color: #fff;
-      border-radius: 4px;
-      outline: none;
-      cursor: pointer;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .user-info{
+    display: block;
+    text-align: center;
+    .info{
+      margin-left: 0;
+      .username{
+        margin-bottom: 10px;
+      }
     }
-
-    .follow:hover {
-      background-color: #fafafa;
+    .meta{
+      display: block;
+      text-align: center;
+      .user-link{
+        display: block;
+        margin: 10px 0;
+      }
     }
   }
 }

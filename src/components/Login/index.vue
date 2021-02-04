@@ -2,18 +2,20 @@
   <div class="login-container">
     <div class="login-box">
       <div class="top">
-        <p>登录博客</p>
+        <p>OurBlog</p>
       </div>
-      <div class="center login-center">
-        <div class="email-input">
-          <input type="text" placeholder="请输入邮箱/用户名" :class="{error: isEmailError}" v-model="username" @focusout="validate">
-          <span>{{emailTip}}</span>
-        </div>
-        <div class="code-input">
-          <input type="password" placeholder="请输入密码" v-model="password">
-          <span>{{pwdTip}}</span>
-        </div>
-        <input type="button" value="登录" @click="login">
+      <div class="center">
+        <el-form :model="loginForm" ref="loginForm" :rules="loginFormRules" status-icon>
+          <el-form-item prop="username">
+            <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item style="text-align: center;width: 100%">
+            <el-button type="primary" size="medium" @click="login" style="width: 100%">登录</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="bottom">
         <p>
@@ -31,44 +33,49 @@ import { login } from "@/api/login"
 export default {
   data(){
     return{
-      registerOrLogin: true,
-      email: '',
-      code: '',
-      username: '',
-      password: '',
-      isEmailError: false,
-      isPwdError: false
+      loginForm: {
+        username: 'user',
+        password: '123456',
+      },
+      loginFormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          {
+            min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur',
+          },
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          {
+            min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur',
+          },
+        ],
+      }
     }
   },
   methods: {
     login(){
-      let data = {
-        username: this.username,
-        password: this.password
-      }
-      login(data).then(res => {
-        console.log(res)
+      let {username, password} = this.loginForm
+      this.$refs.loginForm.validate(valid => {
+        console.log(valid)
+        if (valid) {
+          this.$router.replace('/')
+        } else {
+          return false
+        }
       })
     },
-    validate(){
-      if(this.username == ''){
-        console.log('请输入邮箱或用户名')
-      }
-    },
   },
-  computed: {
-    emailTip(){
-      return this.isEmailError ? '请输入邮箱或用户名' : ''
-    },
-    pwdTip(){
-      return this.isPwdError ? '请输入密码' : ''
-    }
-  }
 }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
-@import "src/assets/css/common";
+@font-face {
+  font-family: tttgbnumber;
+  src: url("../../assets/fonts/tttgbnumber.eot") format("embedded-opentype"),
+  url('../../assets/fonts/tttgbnumber.ttf') format("truetype"),
+  url('../../assets/fonts/tttgbnumber.woff') format("woff");
+}
 .login-container{
   width: 100%;
   height: 100%;
@@ -80,7 +87,7 @@ export default {
   .login-box{
     width: 350px;
     background-color: #fff;
-    opacity: 0.9;
+    opacity: 0.95;
     padding: 25px;
     box-sizing: border-box;
     border-radius: 4px;
@@ -92,50 +99,18 @@ export default {
       width: 100%;
       display: flex;
       justify-content: center;
-      font-size: 20px;
+      font-size: 25px;
       font-weight: bold;
       letter-spacing: 1px;
       p{
         width: 150px;
         text-align: center;
+        font-family: tttgbnumber,serif;
+        color: #2d8cf0;
       }
     }
     .center{
-      width: 100%;
       margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      div{
-        width: 100%;
-        margin-bottom: 25px;
-        position: relative;
-        span{
-          position: absolute;
-          top: 38px;
-          left: 0;
-          font-size: 12px;
-          color: #ed4014;
-        }
-      }
-      input{
-        width: 100%;
-        height: 35px;
-        padding: 8px 10px;
-        box-sizing: border-box;
-      }
-      input[type='button']{
-        border: none;
-        color: #fff;
-        font-size: 16px;
-        letter-spacing: 1px;
-        background-color: #1e90ff;
-        cursor: pointer;
-        transition: background-color .3s;
-      }
-      input[type='button']:hover{
-        background-color: #2d8cf0;
-      }
     }
     .bottom{
       margin-top: 15px;

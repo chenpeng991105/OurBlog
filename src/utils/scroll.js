@@ -1,7 +1,7 @@
 export default function(top){
     if(top == 0){
         let timer = setInterval(() => {
-            document.documentElement.scrollTop = document.documentElement.scrollTop - 100
+            document.documentElement.scrollTop = document.documentElement.scrollTop - 150
             if(document.documentElement.scrollTop <= 0){
                 clearInterval(timer)
             }
@@ -9,14 +9,14 @@ export default function(top){
     }else{
         if(document.documentElement.scrollTop < top){
             let timer = setInterval(() => {
-                document.documentElement.scrollTop += 10;
+                document.documentElement.scrollTop += 50;
                 if(document.documentElement.scrollTop >= top){
                     clearInterval(timer);
                 }
             }, 2);
         }else{
             let timer = setInterval(() => {
-                document.documentElement.scrollTop -= 10;
+                document.documentElement.scrollTop -= 50;
                 if(document.documentElement.scrollTop <= top){
                     clearInterval(timer);
                 }

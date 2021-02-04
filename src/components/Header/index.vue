@@ -3,34 +3,37 @@
     <div class="mini-header">
       <div class="mini-header-left">
         <div class="logo">
-          <a class="name" href="/index">OurBlog</a>
+          <a class="name" href="/">OurBlog</a>
         </div>
         <ul class="mini-header-nav">
-          <li>
-            <a href="/tag">后端</a>
+          <li ref="index" :class="{active: $route.path === '/index'}">
+            <a href="/">首页</a>
           </li>
-          <li>
-            <a href="">前端</a>
+          <li ref="backend" :class="{active: $route.path === '/backend'}">
+            <a href="/backend">后端</a>
           </li>
-          <li>
-            <a href="">实用工具</a>
+          <li ref="frontend" :class="{active: $route.path === '/frontend'}">
+            <a href="/frontend">前端</a>
+          </li>
+          <li ref="tool" :class="{active: $route.path === '/tool'}">
+            <a href="/tool">工具集合</a>
           </li>
         </ul>
-        <div class="nav-cursor" style="width: 68px;left: 0" ref="navCursor"></div>
+        <div class="nav-cursor" :style="{'width': navCursorWidth, 'left': navCursorLeft}" ref="navCursor"></div>
       </div>
       <div class="mini-header-right">
         <div class="search-wrap">
-          <input type="text" placeholder="搜索文章/标签/用户">
+          <input type="text" placeholder="探索OurBlog">
           <i class="iconfont icon-search"></i>
         </div>
         <div class="write">
           <button @click="$router.push('/new')">写文章</button>
         </div>
-        <div class="login">
+<!--        <div class="login">
           <a href="/login" class="login-link">登录</a>
-        </div>
-        <div class="user-info">
-          <img src="@/assets/img/user.jpg" alt="头像" @click="showUserBox">
+        </div>-->
+        <div class="user-info" @click="showUserBox" v-click-outside="hideUserBox">
+          <img src="@/assets/img/bingbing.png" alt="头像">
           <ul class="user-box" v-show="userBoxVisible">
             <li @click="$router.push('/new')">
               <i class="iconfont icon-write"></i>
@@ -50,10 +53,15 @@
             </li>
           </ul>
         </div>
-        <p class="menu">
+        <div class="menu" @click="menuBoxVisible = !menuBoxVisible">
           <i class="iconfont icon-menu"></i>
           <i class="iconfont icon-close" style="display: none;font-size: 18px"></i>
-        </p>
+          <ul class="menu-box" v-show="menuBoxVisible">
+            <li>后端</li>
+            <li>前端</li>
+            <li>实用工具</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -62,7 +70,9 @@
 <script>
 export default {
   mounted() {
-    const navCursor = this.$refs.navCursor
+    const { navCursor } = this.$refs
+    const navCursorWidth = this.getNavCursorWidth
+    const navCursorLeft = this.getNavCursorLeft
     const miniHeaderNav = document.querySelector('.mini-header-nav')
     const miniHeaderNavLi = miniHeaderNav.querySelectorAll('li')
     miniHeaderNavLi.forEach(item => {
@@ -72,8 +82,8 @@ export default {
       }
     })
     miniHeaderNav.onmouseleave = function () {
-      navCursor.style.width = '68px'
-      navCursor.style.left = '0'
+      navCursor.style.width = navCursorWidth
+      navCursor.style.left = navCursorLeft
     }
   },
   props: {
@@ -81,14 +91,33 @@ export default {
   },
   data() {
     return {
-      userBoxVisible: false
+      userBoxVisible: false,
+      menuBoxVisible: false,
+      navCursorWidth: '',
+      navCursorLeft: '',
+    }
+  },
+  computed: {
+    getNavCursorWidth() {
+      const path = this.$route.path.slice(1)
+      this.navCursorWidth = this.$refs[path].offsetWidth+'px'
+      return this.navCursorWidth
+    },
+    getNavCursorLeft() {
+      const path = this.$route.path.slice(1)
+      this.navCursorLeft = this.$refs[path].offsetLeft+'px'
+      return this.navCursorLeft
     }
   },
   methods: {
     showUserBox() {
       this.userBoxVisible = !this.userBoxVisible
+      this.menuBoxVisible = false
     },
-  }
+    hideUserBox() {
+      this.userBoxVisible = false
+    }
+  },
 }
 </script>
 
@@ -148,10 +177,12 @@ export default {
       font-size: 18px;
       color: #71777c;
       transition: color .2s;
-    }
-
-    li:hover {
-      color: #2d8cf0;
+      &:hover{
+        color: #2d8cf0;
+      }
+      &.active{
+        color: #2d8cf0;
+      }
     }
   }
 
@@ -173,30 +204,23 @@ export default {
   top: 0;
   right: 0;
 
-  p {
-    margin-left: 30px;
+  .menu {
+    margin-left: 20px;
     color: #71777c;
     cursor: pointer;
     z-index: 10;
     font-size: 18px;
-  }
-
-  p.menu {
     display: none;
-  }
-
-  p.notice{
-    font-size: 20px;
   }
 
   .search-wrap {
     position: relative;
     input {
-      width: 150px;
+      width: 120px;
       height: 23px;
       line-height: 24px;
       padding: 4px 30px 4px 10px;
-      font-size: 16px;
+      font-size: 14px;
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
       border-radius: 3px;
       border: 1px solid #71777c;
@@ -213,9 +237,9 @@ export default {
     }
 
     .icon-search {
-      font-size: 16px;
+      font-size: 14px;
       position: absolute;
-      top: 8px;
+      top: 10px;
       right: 8px;
       cursor: pointer;
       color: #71777c;
@@ -240,23 +264,27 @@ export default {
   }
   .login{
     margin-left: 30px;
+    color: #666;
     cursor: pointer;
     .login-link:hover{
       color: #2d8cf0;
     }
   }
   .user-info{
-    margin-left: 30px;
+    margin-left: 20px;
     cursor: pointer;
     position: relative;
     img{
       display: inline-block;
       vertical-align: middle;
       width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      object-fit: cover;
     }
     .user-box{
       position: absolute;
-      top: 47px;
+      top: 46px;
       right: 0;
       width: 150px;
       padding: 10px 0;
@@ -300,27 +328,7 @@ export default {
     }
 
     .mini-header-nav {
-      width: 100%;
-      height: 200px;
-      overflow: hidden;
-      margin: 0 auto;
-      background-color: rgba(112, 161, 255, .9);
-      position: absolute;
-      top: 55px;
-      left: 0;
       display: none;
-      z-index: 10;
-
-      li {
-        display: block;
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        margin: 0 auto;
-        color: #fff;
-        text-align: center;
-        float: none;
-      }
     }
 
     @keyframes top-show {
@@ -349,12 +357,34 @@ export default {
   .mini-header-right {
     margin-right: 10px;
 
-    .search-wrap {
-      display: none;
-    }
-
-    p.menu {
+    .menu {
       display: block;
+      position: relative;
+      .menu-box{
+        width: 150px;
+        position: absolute;
+        top: 40px;
+        right: -9px;
+        padding: 10px 0;
+        color: #909090;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        box-shadow: 0 1px 2px #f1f1f1;
+        z-index: 10;
+        li{
+          height: 35px;
+          line-height: 35px;
+          padding-left: 15px;
+          background-color: #fff;
+          &:hover{
+            background-color: #f8f8f8;
+          }
+          .iconfont{
+            margin-right: 3px;
+          }
+        }
+      }
     }
 
     .write{

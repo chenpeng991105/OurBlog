@@ -57,11 +57,32 @@ const routes = [
             title: '个人资料'
         }
     },
+    {
+        path: '/new_success',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/NewSuccess/index'),
+        meta: {
+            title: '分享成功'
+        }
+    },
+    {
+        path: '/tool',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Tool/index'),
+        meta: {
+            title: '实用工具'
+        }
+    },
 ]
 
 const router = new VueRouter({
     mode: 'history',
-    routes
+    routes,
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+    }
 })
 router.beforeEach((to, from, next) => {
     /*路由发生变化修改页面title*/

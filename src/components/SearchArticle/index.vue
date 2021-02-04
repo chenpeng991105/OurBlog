@@ -27,6 +27,7 @@ export default {
             avatar: require('@/assets/img/cyy.jpg'),
             username: 'chenyuyu'
           },
+          articleSummary: true,
           articleInfo: {
             time: '2020-10-20',
             watch: '666',
@@ -41,6 +42,7 @@ export default {
             avatar: require('@/assets/img/cyy.jpg'),
             username: 'chenyuyu'
           },
+          articleSummary: true,
           articleInfo: {
             time: '2020-10-20',
             watch: '666',
@@ -55,6 +57,7 @@ export default {
             avatar: require('@/assets/img/cyy.jpg'),
             username: 'chenyuyu'
           },
+          articleSummary: true,
           articleInfo: {
             time: '2020-10-20',
             watch: '666',
@@ -69,6 +72,7 @@ export default {
             avatar: require('@/assets/img/cyy.jpg'),
             username: 'chenyuyu'
           },
+          articleSummary: true,
           articleInfo: {
             time: '2020-10-20',
             watch: '666',
@@ -83,6 +87,7 @@ export default {
             avatar: require('@/assets/img/cyy.jpg'),
             username: 'chenyuyu'
           },
+          articleSummary: true,
           articleInfo: {
             time: '2020-10-20',
             watch: '666',
