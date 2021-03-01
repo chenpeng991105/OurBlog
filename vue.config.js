@@ -20,18 +20,7 @@ module.exports = {
                     loader: 'less-loader'
                 }
             ]
-        }
+        },
+        devtool: 'source-map',
     },
-    /*devServer: {
-        proxy: {
-            '/': {
-                target: 'http://99ib29.natappfree.cc:9000',
-                ws: true,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/': '/'
-                }
-            }
-        }
-    }*/
 }

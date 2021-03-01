@@ -16,7 +16,7 @@ const routes = [
         }
     },
     {
-        path: '/article',
+        path: '/article/:id',
         component: () => import(/* webpackChunkName: "article" */ '@/views/Article/index'),
         meta: {
             title: '文章'
@@ -30,7 +30,7 @@ const routes = [
         }
     },
     {
-        path: '/user',
+        path: '/user/:id',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/index'),
         meta: {
             title: '个人主页'
@@ -51,7 +51,7 @@ const routes = [
         }
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         component: () => import(/* webpackChunkName: "user" */ '@/views/Profile/index'),
         meta: {
             title: '个人资料'

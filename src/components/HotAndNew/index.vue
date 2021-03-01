@@ -1,101 +1,47 @@
 <template>
-  <div class="hot-new">
-    <ul class="top-line">
-      <li :class="{active : hotOrNew}" @click="hotOrNew = true">热门</li>
-      <li :class="{active : !hotOrNew}" @click="hotOrNew = false">最新</li>
-    </ul>
-    <div class="hot" :style="{display : hotOrNew ? 'block' : 'none'}">
-      <article-wrap :articles="articles"/>
-    </div>
-    <div class="new" :style="{display : hotOrNew ? 'none' : 'block'}">
-      <article-wrap :articles="articles"/>
-    </div>
+  <div>
+    <article-wrap :articles="articles"/>
+    <pagination :total="total" @page-change="handlePageChange"/>
   </div>
 </template>
 
 <script>
 import ArticleWrap from '@/components/ArticleWrap/index'
+import Pagination from '@/components/Pagination/index'
+import { getIndexArticle } from "@/api/article"
+
 export default {
   components: {
-    ArticleWrap
+    ArticleWrap,
+    Pagination
   },
   data(){
     return{
-      articles: [
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-      ],
-      hotOrNew: true
+      articles: [],
+      hotOrNew: true,
+      page: 1,
+      total: 0
     }
   },
+  created() {
+    this.getIndexArticleData()
+  },
+  methods: {
+    getIndexArticleData() {
+      getIndexArticle({page: this.page}).then(res => {
+        if (res.code == 10001) {
+          console.log(res.data)
+          const len = res.data.length - 1
+          this.articles = res.data.slice(0, len)
+          this.total = res.data[len].totalSize
+        }
+      })
+    },
+    handlePageChange(val) {
+      this.page = val
+      this.getIndexArticleData()
+    }
+  }
 }
 </script>
 

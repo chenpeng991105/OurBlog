@@ -5,15 +5,13 @@
         <div @click="$router.push(`/article/${item.id}`)" :key="index" class="article-link">
           <div class="article">
             <div class="article-content">
-              <router-link :to="`/article/${item.id}`" class="article-title">
-                {{ item.articleTitle }}
-              </router-link>
+              <router-link :to="`/article/${item.id}`" class="article-title" v-html="item.articleTitle"></router-link>
               <div class="article-summary" v-if="item.articleSummary">
                 {{ item.articleSummary }}
               </div>
               <div class="article-author">
                 <a :href="'/user/'+item.articleAuthor.authorId" class="author">
-                  <img :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+item.articleAuthor.avatar" alt="">
+                  <img :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+item.articleAuthor.authorPic" alt="">
                   <p>{{ item.articleAuthor.username }}</p>
                 </a>
                 <p class="time">

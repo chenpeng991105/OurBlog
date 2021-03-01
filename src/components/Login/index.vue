@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { login } from "@/api/login"
+import { login } from "@/api/login";
+import {updateUser} from "@/api/user";
 
 export default {
   data(){
     return{
       loginForm: {
-        username: 'user',
+        username: 'cpp',
         password: '123456',
       },
       loginFormRules: {
@@ -55,11 +55,19 @@ export default {
   },
   methods: {
     login(){
-      let {username, password} = this.loginForm
+      const {username, password} = this.loginForm
       this.$refs.loginForm.validate(valid => {
-        console.log(valid)
         if (valid) {
-          this.$router.replace('/')
+          /*login({username, password}).then(res => {
+            if (res.code == 10001) {
+              sessionStorage.setItem('user', JSON.stringify(res.data))
+              this.$router.push('/')
+            }
+            console.log(res)//{id: 1, username: "cpp"}
+          })*/
+          updateUser({username: 'cpp', password: '123456'}).then(res => {
+            console.log(res)
+          })
         } else {
           return false
         }

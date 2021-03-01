@@ -23,17 +23,17 @@
       </div>
       <div class="mini-header-right">
         <div class="search-wrap">
-          <input type="text" placeholder="探索OurBlog">
-          <i class="iconfont icon-search"></i>
+          <input type="text" placeholder="探索OurBlog" v-model="keyword" @keyup.enter="search">
+          <i class="iconfont icon-search" @click="search"></i>
         </div>
         <div class="write">
           <button @click="$router.push('/new')">写文章</button>
         </div>
-<!--        <div class="login">
+        <div class="login" v-if="userAvatar == ''">
           <a href="/login" class="login-link">登录</a>
-        </div>-->
-        <div class="user-info" @click="showUserBox" v-click-outside="hideUserBox">
-          <img src="@/assets/img/bingbing.png" alt="头像">
+        </div>
+        <div class="user-info" @click="showUserBox" v-click-outside="hideUserBox" v-else>
+          <img :src="userAvatar" alt="头像">
           <ul class="user-box" v-show="userBoxVisible">
             <li @click="$router.push('/new')">
               <i class="iconfont icon-write"></i>
@@ -47,7 +47,7 @@
               <i class="iconfont icon-profile"></i>
               个人资料
             </li>
-            <li>
+            <li @click="logout">
               <i class="iconfont icon-logout"></i>
               登出
             </li>
@@ -68,7 +68,30 @@
 </template>
 
 <script>
+import { searchByKeyword } from "@/api/article"
+
 export default {
+  props: {
+
+  },
+  data() {
+    return {
+      userBoxVisible: false,
+      menuBoxVisible: false,
+      navCursorWidth: '',
+      navCursorLeft: '',
+      keyword: '',
+      userAvatar: '',
+    }
+  },
+  created() {
+    const user = JSON.parse(sessionStorage.getItem('user'))
+    if (user) {
+      this.userAvatar = 'https://yudachi.oss-cn-shenzhen.aliyuncs.com/' + user.pic
+    } else {
+      this.userAvatar = ''
+    }
+  },
   mounted() {
     const { navCursor } = this.$refs
     const navCursorWidth = this.getNavCursorWidth
@@ -86,27 +109,24 @@ export default {
       navCursor.style.left = navCursorLeft
     }
   },
-  props: {
-
-  },
-  data() {
-    return {
-      userBoxVisible: false,
-      menuBoxVisible: false,
-      navCursorWidth: '',
-      navCursorLeft: '',
-    }
-  },
   computed: {
     getNavCursorWidth() {
       const path = this.$route.path.slice(1)
-      this.navCursorWidth = this.$refs[path].offsetWidth+'px'
-      return this.navCursorWidth
+      if (this.$refs[path]) {
+        this.navCursorWidth = this.$refs[path].offsetWidth+'px'
+        return this.navCursorWidth
+      } else {
+        return ''
+      }
     },
     getNavCursorLeft() {
       const path = this.$route.path.slice(1)
-      this.navCursorLeft = this.$refs[path].offsetLeft+'px'
-      return this.navCursorLeft
+      if (this.$refs[path]) {
+        this.navCursorLeft = this.$refs[path].offsetLeft+'px'
+        return this.navCursorLeft
+      } else {
+        return ''
+      }
     }
   },
   methods: {
@@ -116,6 +136,22 @@ export default {
     },
     hideUserBox() {
       this.userBoxVisible = false
+    },
+    search() {
+      /*searchByKeyword({type: 3, keyword: this.keyword, page: 1}).then(res => {
+        console.log(res.data)
+      })*/
+      const keyword = this.keyword.trim()
+      if (keyword) {
+        this.$router.push({
+          path: '/search',
+          query: { keyword }
+        })
+      }
+    },
+    logout() {
+      sessionStorage.removeItem('user')
+      location.reload()
     }
   },
 }

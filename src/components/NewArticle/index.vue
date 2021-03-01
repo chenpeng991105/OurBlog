@@ -2,16 +2,16 @@
   <div class="new-article">
     <div class="header">
       <div class="left">
-        <input type="text" placeholder="请输入文章标题..." class="title">
+        <input type="text" placeholder="请输入文章标题..." class="title" v-model="articleTitle">
       </div>
       <div class="right">
         <div @click="imgBoxVisible = true" v-click-outside="hideImgBox">
-          <i class="iconfont icon-img" :style="{color: imgFile !=='' ? '#007fff' : '#909090'}"></i>
+          <i class="iconfont icon-img" :style="{color: articleImg !=='' ? '#007fff' : '#909090'}"></i>
           <div class="img-box" v-show="imgBoxVisible">
             <div class="title">添加封面大图</div>
-            <div class="default" v-show="!imgFile" @click="addBigImg">点击此处添加图片</div>
+            <div class="default" v-show="!articleImg" @click="addBigImg">点击此处添加图片</div>
             <input type="file" hidden ref="file" @change="imgChange($event)">
-            <div class="img-con" v-if="imgFile">
+            <div class="img-con" v-if="articleImg">
               <img src="" alt="封面大图" ref="image" class="img">
               <div class="delete-img" title="删除这张图片" @click.stop="deleteImg">
                 <i class="iconfont icon-delete"></i>
@@ -91,6 +91,8 @@
 
 <script>
 import marked from 'marked'
+import { uploadImage, newArticle } from "@/api/article";
+
 export default {
   data() {
     return {
@@ -130,6 +132,7 @@ export default {
         subfield: true, // 单双栏模式
         preview: true // 预览
       },
+      articleTitle: '',
       visible: false,
       tagInputVisible: false,
       tagInputValue: '',
@@ -139,7 +142,7 @@ export default {
       cates: ['前端', '后端', '大数据', '人工智能'],
       selectCate: '',
       event: {},
-      imgFile: '',
+      articleImg: '',
       imgBoxVisible: false,
     };
   },
@@ -149,8 +152,8 @@ export default {
       console.log(pos, $file);
       const formData = new FormData()
       formData.append('file', $file)
-      this.$axios.post('http://99ib29.natappfree.cc/article/upload', formData).then(res => {
-        this.$refs.md.$imglst2Url([[pos, 'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+res.data.data]])
+      uploadImage(formData).then(res => {
+        this.$refs.md.$imglst2Url([[pos, 'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+res.data]])
       })
       // console.log(this.$refs.md)
     },
@@ -191,20 +194,36 @@ export default {
       this.selectCate = cate
     },
     publish() {
-      console.log(marked(this.content))
+      const { articleTitle, articleImg, selectCate, tags, content } = this
+      const articleTags = {
+        category: selectCate,
+        tags: tags
+      }
+      const htmlArticle = marked(content)
+      console.log(htmlArticle.replace(/\"/g, "'"))
+      newArticle({uId: 1, articleTitle, articleImg, articleTags, htmlArticle}).then(res => {
+        console.log(res)
+      })
     },
     addBigImg() {
       this.$refs.file.click()
     },
     imgChange(e) {
-      this.imgFile = e.target.files[0]
-      console.log(this.imgFile)
+      this.articleImg = e.target.files[0]
+      const formData = new FormData()
+      formData.append('file', this.articleImg)
       this.$nextTick(() => {
-        this.$refs.image.src = URL.createObjectURL(this.imgFile)
+        this.$refs.image.src = URL.createObjectURL(this.articleImg)
+      })
+      uploadImage(formData).then(res => {
+        this.articleImg = 'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+res.data
+        this.$nextTick(() => {
+          this.$refs.image.src = this.articleImg
+        })
       })
     },
     deleteImg() {
-      this.imgFile = ''
+      this.articleImg = ''
       this.$refs.file.value = ''
     },
   }

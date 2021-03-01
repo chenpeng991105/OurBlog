@@ -5,7 +5,6 @@
       <div class="content">
         <div class="content-left">
           <hot-and-new/>
-          <pagination/>
         </div>
         <div class="content-right">
           <author-lists/>
@@ -18,14 +17,12 @@
 
 <script>
 import Header from '@/components/Header/index'
-import Pagination from '@/components/Pagination/index'
 import HotAndNew from '@/components/HotAndNew/index'
 import AuthorLists from '@/components/AuthorLists/index'
 import BackToTop from '@/components/BackToTop/index'
 export default {
   components: {
     Header,
-    Pagination,
     HotAndNew,
     AuthorLists,
     BackToTop

@@ -1,101 +1,55 @@
 <template>
-  <div class="search-article">
-    <ul class="top-line">
-      <li :class="{active: activeKey === 1}" @click="activeKey = 1">综合</li>
-      <li :class="{active: activeKey === 2}" @click="activeKey = 2">文章</li>
-      <li :class="{active: activeKey === 3}" @click="activeKey = 3">标签</li>
-      <li :class="{active: activeKey === 4}" @click="activeKey = 4">作者</li>
-    </ul>
-    <article-wrap :articles="articles"/>
+  <div>
+    <div class="search-article">
+      <ul class="top-line">
+        <li :class="{active: activeKey === 1}" @click="activeKey = 1">文章</li>
+        <li :class="{active: activeKey === 2}" @click="activeKey = 2">作者</li>
+      </ul>
+      <search-article-wrap :articles="articles"/>
+    </div>
+    <pagination :total="total" @page-change="handlePageChange"/>
   </div>
 </template>
 
 <script>
-import ArticleWrap from '@/components/ArticleWrap/index'
+import SearchArticleWrap from '@/components/SearchArticleWrap/index'
+import Pagination from '@/components/Pagination/index'
+import { searchByKeyword } from "@/api/article";
+
 export default {
   components: {
-    ArticleWrap
+    SearchArticleWrap,
+    Pagination
   },
   data() {
     return {
       activeKey: 1,
-      articles: [
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleSummary: true,
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleSummary: true,
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleSummary: true,
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleSummary: true,
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-        {
-          articleImg: require('@/assets/img/bingbing.png'),
-          articleTitle: 'JavaScript实现函数防抖和函数节流',
-          articleAuthor: {
-            avatar: require('@/assets/img/cyy.jpg'),
-            username: 'chenyuyu'
-          },
-          articleSummary: true,
-          articleInfo: {
-            time: '2020-10-20',
-            watch: '666',
-            comments: '666',
-            zan: '666'
-          }
-        },
-      ],
+      articles: [],
+      total: 0,
+      page: 1,
+      keyword: '',
+      type: 1,
+    }
+  },
+  created() {
+    this.keyword = this.$route.query.keyword
+    this.searchByKeyword()
+  },
+  methods: {
+    searchByKeyword() {
+      const { type, keyword, page } = this
+      searchByKeyword({type, keyword, page}).then(res => {
+        if (res.code == 10001) {
+          console.log(res.data)
+          const len = res.data.length - 1
+          this.articles = res.data.slice(0, len)
+          this.total = res.data[len].totalSize
+        }
+      })
+    },
+    handlePageChange(val) {
+      this.page = val
+      this.searchByKeyword()
     }
   }
 }

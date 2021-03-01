@@ -11,14 +11,14 @@
                 hidden ref="file"
                 @change="avatarChange($event)"
                 accept="image/jpeg, image/png, image/gif">
-            <img src="@/assets/img/bingbing2.jpg" alt="用户头像" class="avatar-preview" ref="preview">
+            <img :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+user.pic" alt="用户头像" class="avatar-preview" ref="preview">
             <el-button type="primary" size="medium" @click="uploadAvatar">点击上传</el-button>
           </div>
         </li>
         <li class="item">
           <span>用户名</span>
           <div class="input-box">
-            <input type="text" class="input" placeholder="填写你的用户名" ref="username" v-model="username">
+            <input type="text" class="input" placeholder="填写你的用户名" ref="username" v-model="user.username">
             <div class="action">
               <el-button type="text" v-if="!isEditUsername" @click="editUsername">修改</el-button>
               <el-button type="text" v-if="isEditUsername" @click="saveUsername">保存</el-button>
@@ -29,7 +29,7 @@
         <li class="item">
           <span>密码</span>
           <div class="input-box">
-            <input type="password" class="input" placeholder="填写你的密码" ref="password" v-model="password">
+            <input type="password" class="input" placeholder="填写你的密码" ref="password" v-model="user.password">
             <div class="action">
               <el-button type="text" v-if="!isEditPassword" @click="editPassword">修改</el-button>
               <el-button type="text" v-if="isEditPassword" @click="savePassword">保存</el-button>
@@ -42,7 +42,7 @@
             <i class="iconfont icon-github" style="font-size: 20px"></i>
           </span>
           <div class="input-box">
-            <input type="text" class="input" placeholder="填写你的github链接" ref="githubUrl" v-model="githubUrl">
+            <input type="text" class="input" placeholder="填写你的github链接" ref="githubUrl" v-model="user.github">
             <div class="action">
               <el-button type="text" v-if="!isEditGithubUrl" @click="editGithubUrl">修改</el-button>
               <el-button type="text" v-if="isEditGithubUrl" @click="saveGithubUrl">保存</el-button>
@@ -56,16 +56,32 @@
 </template>
 
 <script>
+import {findUser, updateUser} from "@/api/user";
+
 export default {
   data() {
     return {
+      user: {},
       isEditUsername: false,
       isEditPassword: false,
       isEditGithubUrl: false,
+      uId: '',
       username: '一股恶',
       password: '666666',
       githubUrl: 'https://www.qq.com',
     }
+  },
+  created() {
+    this.uId = this.$route.params.id
+    findUser({uId: this.uId}).then(res => {
+      if (res.code == 10001) {
+        console.log(res.data)
+        if (!res.data.github) {
+          res.data.github = 'https://www.github.com'
+        }
+        this.user = res.data
+      }
+    })
   },
   methods: {
     uploadAvatar() {
@@ -79,7 +95,14 @@ export default {
       this.$refs.username.select()
     },
     saveUsername() {
-
+      /*console.log(this.uId)
+      console.log(this.user.username)*/
+      /*updateUser({id: Number(this.uId), username: this.user.username}).then(res => {
+        console.log(res)
+      })*/
+      updateUser({username: 'cpp', password: '123456'}).then(res => {
+        console.log(res)
+      })
     },
     editPassword() {
       this.isEditPassword = true

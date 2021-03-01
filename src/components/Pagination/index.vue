@@ -2,8 +2,12 @@
   <div class="pagination">
     <el-pagination
         background
+        hide-on-single-page
         layout="prev, pager, next"
-        :total="100">
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="10"
+        :total="total">
     </el-pagination>
   </div>
 </template>
@@ -11,6 +15,17 @@
 <script>
 
 export default {
+  props: {
+    total: Number
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.$emit('page-change', val)
+    },
+    handleCurrentChange(val) {
+      this.$emit('page-change', val)
+    }
+  }
 }
 </script>
 

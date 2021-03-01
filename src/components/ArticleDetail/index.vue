@@ -1,12 +1,12 @@
 <template>
-  <div class="article-wrap">
+  <div class="article-wrap" v-if="articleDetail">
     <div class="article-author">
-      <a href="/user">
-        <img src="@/assets/img/user.jpg" alt="" class="avatar">
-      </a>
+      <router-link :to="`/user/${articleDetail.authorId}`">
+        <img :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+articleDetail.authorImg" alt="" class="avatar">
+      </router-link>
       <div class="author-info">
-        <a href="" class="username">chenyuyu</a>
-        <div class="article-data">
+        <a href="" class="username">{{articleDetail.authorName}}</a>
+        <div class="article-data" v-if="articleDetail.articleData">
           <p class="time">
             <span>{{articleDetail.articleData.time}}</span>
           </p>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="article-banner">
-      <img alt="" class="banner" :src="articleDetail.articleImg">
+      <img alt="" class="banner" :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+articleDetail.articleImg">
     </div>
     <div class="article-title">
       <h1>{{articleDetail.articleTitle}}</h1>
@@ -43,9 +43,7 @@ Vue.directive('highlight', function (el){
 })
 export default {
   props: {
-    articleDetail: {
-      type: Object
-    }
+    articleDetail: Object
   },
   data(){
     return{

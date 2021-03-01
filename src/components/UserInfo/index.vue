@@ -1,25 +1,30 @@
 <template>
-  <div class="user-info">
+  <div class="user-info" v-if="user">
     <div class="avatar">
-      <img src="@/assets/img/user.jpg" alt="">
+      <img :src="'https://yudachi.oss-cn-shenzhen.aliyuncs.com/'+user.pic" alt="">
     </div>
     <div class="info">
-      <p class="username">WU</p>
-      <p class="desc">Java后端攻城狮</p>
+      <p class="username">{{user.username}}</p>
+      <p class="desc">大厂小分队</p>
     </div>
     <div class="meta">
       <div class="user-link">
-        <a href="" class="link">
+        <a :href="user.github" target="_blank" class="link">
           <i class="iconfont icon-github"></i>
         </a>
       </div>
-      <el-button plain @click="$router.push('/profile')">编辑个人资料</el-button>
+      <el-button v-if="user.id" plain @click="$router.push(`/profile/${user.id}`)">编辑个人资料</el-button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+
+export default {
+  props: {
+    user: Object
+  }
+}
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
