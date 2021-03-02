@@ -66,9 +66,9 @@ export default {
       isEditPassword: false,
       isEditGithubUrl: false,
       uId: '',
-      username: '一股恶',
-      password: '666666',
-      githubUrl: 'https://www.qq.com',
+      username: '',
+      password: '',
+      github: '',
     }
   },
   created() {
@@ -91,42 +91,47 @@ export default {
       this.$refs.preview.src = URL.createObjectURL(e.target.files[0])
     },
     editUsername() {
+      this.username = this.user.username
       this.isEditUsername = true
       this.$refs.username.select()
     },
     saveUsername() {
-      /*console.log(this.uId)
-      console.log(this.user.username)*/
-      /*updateUser({id: Number(this.uId), username: this.user.username}).then(res => {
-        console.log(res)
-      })*/
-      updateUser({username: 'cpp', password: '123456'}).then(res => {
+      updateUser({id: Number(this.uId), username: this.user.username}).then(res => {
         console.log(res)
       })
     },
     editPassword() {
+      this.password = this.user.password
       this.isEditPassword = true
       this.$refs.password.select()
     },
     savePassword() {
-
+      updateUser({id: Number(this.uId), username: this.user.password}).then(res => {
+        console.log(res)
+      })
     },
     editGithubUrl() {
+      this.github = this.user.github
       this.isEditGithubUrl = true
       this.$refs.githubUrl.select()
     },
     saveGithubUrl() {
-
+      updateUser({id: Number(this.uId), username: this.user.github}).then(res => {
+        console.log(res)
+      })
     },
     cancel(type) {
       switch (type) {
         case 'username':
+          this.user.username = this.username
           this.isEditUsername = false
           break
         case 'password':
+          this.user.password = this.password
           this.isEditPassword = false
           break
         case 'githubUrl':
+          this.user.github = this.github
           this.isEditGithubUrl = false
           break
       }
